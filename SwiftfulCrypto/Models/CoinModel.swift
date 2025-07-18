@@ -56,6 +56,7 @@ struct CoinModel: Identifiable, Codable {
         case currentHoldings
     }
     func updateHoldings(amount: Double) -> CoinModel {
+        print("[😎]CoinModel.type is ",CoinModel.Type .self)
         return CoinModel(    id: id,
                              symbol: symbol,
                              name: name,

@@ -41,6 +41,8 @@ class NetworkingManager {
         else {
             throw NetworkingError.badURLResponse(url: url)
         }
+        print("[👍🏼]This is output.data.description: ",output.data.description)
+        print("[🙄]this is output.data.base64EncodedString:", output.data.base64EncodedString())
         return output.data
     }
     
