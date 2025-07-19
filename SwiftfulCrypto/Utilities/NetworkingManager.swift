@@ -39,10 +39,13 @@ class NetworkingManager {
         guard let response = output.response as? HTTPURLResponse,
               response.statusCode >= 200 && response.statusCode < 300
         else {
-            throw NetworkingError.badURLResponse(url: url)
+                  throw NetworkingError.badURLResponse(url: url)
         }
+        print("response.statusCode is ",response.statusCode)
         print("[👍🏼]This is output.data.description: ",output.data.description)
-        print("[🙄]this is output.data.base64EncodedString:", output.data.base64EncodedString())
+//        print("[🙄]this is output.data.base64EncodedString:", output.data.base64EncodedString())
+        print("[🙄]this is output.data.count: ", output.data.count)
+        print("Timestamp: \(Date())")
         return output.data
     }
     
