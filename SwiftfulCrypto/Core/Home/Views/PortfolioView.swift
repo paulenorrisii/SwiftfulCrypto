@@ -12,6 +12,7 @@ struct PortfolioView: View {
     @EnvironmentObject private var vm: HomeViewModel
     @State private var selectedCoin: CoinModel? = nil
     @State private var quantityText: String = ""
+    @State private var showCheckmark: Bool = false
     
     
     var body: some View {
@@ -28,16 +29,21 @@ struct PortfolioView: View {
                 }
             }
             
-        .navigationTitle("Edit Portfolio")
+            .navigationTitle("Edit Portfolio")
             .toolbar(content: {
                 ToolbarItem(placement: .navigationBarLeading) {
                     XMarkButton()
                 }
-            })
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    trailingNavBarButtons
+                    }
+                    
+                })
+            }
         }
     }
-}
 
+ 
 struct PortfolioView_Previews: PreviewProvider {
     static var previews: some View {
         PortfolioView()
@@ -85,7 +91,7 @@ extension PortfolioView {
                 Spacer()
                 Text(selectedCoin?.currentPrice.asCurrencyWith6Decimals() ?? "")
             }
-Divider()
+            Divider()
             HStack{
                 Text("Amount holding:")
                 Spacer()
@@ -93,7 +99,7 @@ Divider()
                     .multilineTextAlignment(.trailing)
                     .keyboardType(.decimalPad)
             }
-             Divider()
+            Divider()
             HStack {
                 Text("Current value:")
                 Spacer()
@@ -103,5 +109,50 @@ Divider()
         .animation(.none)
         .padding()
         .font(.headline)
+    }
+    
+    
+    private var trailingNavBarButtons: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "checkmark")
+                .opacity(showCheckmark ? 1 : 0)
+            Button(action: {
+                saveButtonPressed()
+            }, label: {
+                Text("Save".uppercased())
+            })
+            .opacity(
+                (selectedCoin != nil && selectedCoin?.currentHoldings != Double(quantityText)) ? 1 : 0
+            )
+        }
+        .font(.headline)
+    }
+    
+    private func saveButtonPressed() {
+        
+        guard let coin = selectedCoin else { return }
+        
+        // save to portfolio
+        
+        
+        //show checkmark
+        withAnimation(.easeOut) {
+        showCheckmark = true
+        removeSelectedCoin()
+    }
+    
+    // hide keyboard
+    UIApplication.shared.endEditing()
+    
+    // hide checkmark
+    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+        showCheckmark = false
+    }
+}
+
+    
+    private func removeSelectedCoin() {
+        selectedCoin = nil
+        vm.searchText = ""
     }
 }
